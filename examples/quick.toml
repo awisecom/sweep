@@ -1,0 +1,24 @@
+# A 576-configuration slice of detect.toml: same target, runs in seconds.
+#   python -m sweep run examples/quick.toml && python -m sweep analyze examples/quick.toml
+
+[sweep]
+name = "quick"
+target = "sweep.demo.detect:evaluate"
+metric = "f1"
+seed = 2026
+
+[options]
+cases = [0, 1, 2, 3]
+length = 600
+tolerance = 8
+
+[grid]
+statistic = ["meanshift", "medianshift", "zscore", "cusum"]
+normalisation = ["mad", "none"]
+confirm = [1]
+window = [20, 40]
+threshold = [2.0, 3.0, 4.0]
+smoothing = ["none", "median3"]
+debounce = [10]
+rearm = [0.25, 0.5, 0.8]
+decimate = [1, 2]

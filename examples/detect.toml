@@ -1,0 +1,27 @@
+# Step-change detection: 24 detector variants x 1,728 settings = 41,472 configurations.
+#   python -m sweep run examples/detect.toml
+#   python -m sweep analyze examples/detect.toml
+
+[sweep]
+name = "detect"
+target = "sweep.demo.detect:evaluate"
+metric = "f1"
+seed = 2026
+
+[options]
+cases = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]   # the signals every configuration is scored on
+length = 600
+tolerance = 8
+
+[grid]
+# 24 detector variants: statistic x normalisation x confirm
+statistic = ["meanshift", "medianshift", "zscore", "cusum"]
+normalisation = ["global", "mad", "none"]
+confirm = [1, 2]
+# 1,728 settings for each of them
+window = [10, 20, 40, 80]
+threshold = [2.0, 3.0, 4.0, 5.0]
+smoothing = ["none", "ema", "median3"]
+debounce = [0, 10, 25]
+rearm = [0.25, 0.5, 0.8]
+decimate = [1, 2, 3, 4]
