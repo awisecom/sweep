@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sweep"
+version = "0.4.0"
+description = "Run every combination, then find out which variable actually mattered."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Aleksander Wisniewski" }]
+dependencies = []  # standard library only
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff==0.15.11", "mypy==1.20.2"]
+
+[project.scripts]
+sweep = "sweep.cli:main"
+
+[tool.setuptools]
+packages = ["sweep", "sweep.demo"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
