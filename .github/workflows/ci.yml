@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy sweep
+      - run: pytest -q
+
+  demo:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Full sweep, 41,472 configurations
+        run: python -m sweep run examples/detect.toml
+      - name: Which factor mattered
+        run: python -m sweep analyze examples/detect.toml
+      - name: Proof on 86 unseen signals
+        run: python -m sweep controlled examples/detect.toml --values 5,10,15,20,30,40,60,80
